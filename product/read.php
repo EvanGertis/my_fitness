@@ -7,54 +7,51 @@ header("Content-Type: appliction/json; charset=UTF-8");
 
 // include database and object files.
 include '../config/database.php';
-include '../objects/product.php';
+include '../objects/monday.php';
 
 // instantiate database and product object.
 $database = new Database();
 $db = $database->getConnection();
 
-// initialize the product object.
-$product = new Product($db);
+// initialize the monday object.
+$monday = new Monday($db);
 
 // query products.
-$stmt = $product->read();
+$stmt = $monday->read();
 $num = $stmt->rowCount();
 
 // check if more than 0 records are found.
 if($num>0){
 
     // create products array.
-    $products_arr = array();
-    $products_arr["records"] = array();
+    $monday_arr = array();
+    $monday_arr["records"] = array();
 
     // retrieve our table contents.
     // fetch() is faster than fetchAll().
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
         // extract row.
 
-        $product_item= array(
+        $monday_item= array(
             "id"=>$row['id'],
-            "name"=>$row['name'],
-            "description"=> html_entity_decode($row['description']),
-            "price"=> $row['price'],
-            "category_id"=> $row['category_id'],
-            "category_name"=> $row['category_name']
+            "reps"=>$row['reps'],
+            "exercise"=> html_entity_decode($row['exercise'])
         );
 
-        array_push($products_arr["records"], $product_item);
+        array_push($monday_arr["records"], $monday_item);
     }
 
     // set response code -200 OK
     http_response_code(200);
 
-    // show products data in jason format.
-    echo json_encode($products_arr);
+    // show monday data in jason format.
+    echo json_encode($monday_arr);
 } else {
     // set the response code to - 404 not found.
     http_response_code(404);
 
-    // tell the user no products found.
+    // tell the user no routines found.
     echo json_encode(
-        array("message"=> "No products found.")
+        array("message"=> "No routines found.")
     );
 }
