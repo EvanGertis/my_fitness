@@ -23,9 +23,9 @@ $monday->id = isset($_GET['id']) ? $_GET['id'] : die();
 // read the details of monday to be edited.
 $monday->readOne();
 
-if($product->name!=null){
+if($monday->id!=null){
     //create array.
-    $product_arr = array(
+    $monday_arr = array(
         "id" => $monday->id,
         "reps" => $monday->reps,
         "exercise" => $monday->exercise

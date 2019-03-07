@@ -67,7 +67,7 @@ class Monday{
 
         // query to read single record.
         $query = "SELECT
-        reps, exercise FROM ". $this->table_name." WHERE id = ? LIMIT 0,1";
+        id, reps, exercise FROM ". $this->table_name." WHERE id = ? LIMIT 0,1";
 
         $stmt = $this->conn->prepare($query);
 
