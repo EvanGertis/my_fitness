@@ -91,7 +91,7 @@ class Monday{
         $query = "UPDATE ".$this->table_name."
         SET 
             reps = :reps,
-            exercise = :exercise,
+            exercise = :exercise
         WHERE
             id = :id";
 

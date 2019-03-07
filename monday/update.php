@@ -8,35 +8,33 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // include database and object files.
 include_once '../config/database.php';
-include_once '../objects/product.php';
+include_once '../objects/monday.php';
 
 // get database connection.
 $database = new Database();
 $db = $database->getConnection();
 
-// prepare product object.
-$product = new Product($db);
+// prepare monday object.
+$monday = new Monday($db);
 
-// get id of product to be edited.
+// get id of monday to be edited.
 $data = json_decode(file_get_contents("php://input"));
 
-// set ID property of product to be edited.
-$product->id = $data->id;
+// set ID property of monday to be edited.
+$monday->id = $data->id;
 
-// set product property values.
-$product->name = $data->name;
-$product->price = $data->price;
-$product->description = $data->description;
-$product->category_id = $data->category_id;
+// set monday property values.
+$monday->reps = $data->reps;
+$monday->exercise = $data->exercise;
 
-if($product->update()){
+if($monday->update()){
     http_response_code(200);
 
-    echo json_encode(array("message"=> "Product updated."));
+    echo json_encode(array("message"=> "Routine updated."));
 } else {
     //set response code - 503 service unavailable.
     http_response_code(503);
 
     // tell the user.
-    echo json_encode(array("message"=> "unable to update product"));
+    echo json_encode(array("message"=> "unable to update routine"));
 }
