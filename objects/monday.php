@@ -10,9 +10,6 @@ class Monday{
     public $id;
     public $reps;
     public $exercise;
-    public $price;
-    public $category_id;
-    public $category_name;
     public $created;
 
     // constructo with $db as database connection.

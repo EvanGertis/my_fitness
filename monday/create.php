@@ -26,8 +26,8 @@ if(
     !empty($data->exercise)
 ){
     // set monday property values.
-    $monday->reps = $data->name;
-    $monday->price = $data->price;
+    $monday->reps = $data->reps;
+    $monday->exercise = $data->exercise;
     $monday->created = date('Y-m-d H:i:s');
     
     //create the product.
