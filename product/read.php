@@ -9,7 +9,7 @@ header("Content-Type: appliction/json; charset=UTF-8");
 include '../config/database.php';
 include '../objects/monday.php';
 
-// instantiate database and product object.
+// instantiate database and monday object.
 $database = new Database();
 $db = $database->getConnection();
 
