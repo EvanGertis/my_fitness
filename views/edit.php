@@ -4,7 +4,7 @@
     <div class="card-header">
         Edit 
     </div>
-    <ul class="list-group list-group-flush">
+    <ul id = "list" class="list-group list-group-flush">
         <li class="list-group-item"></li>
     </ul>
     </div>
