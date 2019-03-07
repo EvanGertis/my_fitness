@@ -27,8 +27,8 @@ if($product->name!=null){
     //create array.
     $product_arr = array(
         "id" => $monday->id,
-        "reps" => $monday->name,
-        "exercise" => $monday->description
+        "reps" => $monday->reps,
+        "exercise" => $monday->exercise
     );
 
     // set response code - 200 OK.
