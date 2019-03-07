@@ -17,7 +17,10 @@
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if(this.readyState == 4 && this.status ==200){
-            document.getElementById("list").innerHTML = this.responseText;
+            var res = JSON.parse(this.responseText);
+            res.records.forEach(e => {
+                console.log(e.reps + " " + e.exercise);
+            })
         }
     };
     xhttp.open("GET", "../monday/read.php" );
