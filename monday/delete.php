@@ -9,33 +9,33 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 // include database and object file.
 include_once '../config/database.php';
-include_once '../objects/product.php';
+include_once '../objects/monday.php';
 
 // get database connection.
 $database = new Database();
 $db = $database->getConnection();
 
 // perpare product object.
-$product = new Product($db);
+$monday = new Monday($db);
 
-// get product id.
+// get workout id.
 $data = json_decode(file_get_contents("php://input"));
 
-// get product id.
-$product->id = $data->id;
+// get workout id.
+$monday->id = $data->id;
 
 
 // delete the product.
-if($product->delete()){
+if($monday->delete()){
     http_response_code(200);
 
     //tell the user.
-    echo json_encode(array("message"=> "product was deleted"));
+    echo json_encode(array("message"=> "routine was deleted"));
 } else {
 
     //set response code - 503 service unavailable.
     http_response_code(503);
     
     // tell the user.
-    echo json_encode(array("message"=>"unable to delete product'"));
+    echo json_encode(array("message"=>"unable to delete routine'"));
 }
