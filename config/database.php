@@ -2,7 +2,7 @@
 
 class Database{
     private $host = "localhost";
-    private $db_name = "api_db";
+    private $db_name = "my_fitness";
     private $username = "root";
     private $password = "";
     public $conn;
