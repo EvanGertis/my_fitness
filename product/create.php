@@ -11,50 +11,46 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once '../config/database.php';
 
 // instantiate product object.
-include_once '../objects/product.php';
+include_once '../objects/monday.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$product = new Product($db);
+$monday = new Monday($db);
 
 // get posted data.
 $data = json_decode(file_get_contents("php://input"));
 // make sure data is not empty.
 if(
-    !empty($data->name) &&
-    !empty($data->price) &&
-    !empty($data->description) &&
-    !empty($data->category_id)
+    !empty($data->reps) &&
+    !empty($data->exercise)
 ){
-    // set product property values.
-    $product->name = $data->name;
-    $product->price = $data->price;
-    $product->description = $data->description;
-    $product->category_id = $data->category_id;
-    $product->created = date('Y-m-d H:i:s');
+    // set monday property values.
+    $monday->reps = $data->name;
+    $monday->price = $data->price;
+    $monday->created = date('Y-m-d H:i:s');
     
     //create the product.
-    if($product->create()){
+    if($monday->create()){
 
         //set response code -201 created
         http_response_code(201);
 
         //tell the user.
-        echo json_encode(array("message"=> "product was created."));
+        echo json_encode(array("message"=> "routine was created."));
     } else {
-        //if unable to create the product, tell the user
+        //if unable to create the routine, tell the user
 
         //set response code - 503 service unavailable.
         http_response_code(503);
 
         //tell the user.
-        echo json_encode(array("message"=> "unable to create product."));
+        echo json_encode(array("message"=> "unable to create routine."));
     }
 } else {
     // tell the user data is incomplete.
     http_response_code(400);
 
     //tell the user.
-    echo json_encode(array("message"=> "Unable to create the product"));
+    echo json_encode(array("message"=> "Unable to create the routine"));
 }

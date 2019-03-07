@@ -1,10 +1,10 @@
 <?php 
 
-class Schedule{
+class Monday{
 
     //database connection and table name.
     private $conn;
-    private $table_name = "schedule";
+    private $table_name = "Monday";
 
     // object properties.
     public $id;
