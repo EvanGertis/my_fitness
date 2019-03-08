@@ -1,13 +1,15 @@
 
 <?php include("./partials/header.php")?>
 
-    <div class="card" style="width: 18rem;">
-    <div class="card-header">
-        My workouts
-    </div>
-    <ul class="list-group list-group-flush">
-        <li id = "list" class="list-group-item"></li>
-    </ul>
+    <div class="container d-flex justify-content-center">
+        <div class="card" style="width: 18rem;">
+        <div class="card-header d-flex justify-content-center h1">
+            MY WORKOUT
+        </div>
+        <ul id = "list" class="list-group">
+            
+        </ul>
+        </div>
     </div>
 
 <?php include("./partials/footer.php")?>
@@ -19,29 +21,33 @@ function updateUi(){
     var list = document.getElementById("list");
     // cycle through data and add it to the list.
     xhttp.onreadystatechange = function () {
-        list.innerHTML = "Monday";
+        list.innerHTML = "";
         if(this.readyState == 4 && this.status ==200){
     
             var res = JSON.parse(this.response);
             res.records.forEach(e => {
                 //generate main list.
                 var li = document.createElement("li")
+                li.setAttribute("class", "list-group-item")
                 li.setAttribute("id", e.id)
 
                 // ui content begin.
                 var reps = document.createElement("p");
                 reps.setAttribute("contentEditable", "true");
+                reps.setAttribute("class", "form-control");
                 reps.innerHTML = `${e.reps}`;
                 reps.addEventListener('keydown', edit)
                 
                 var exercise = document.createElement("p");
                 exercise.setAttribute("contentEditable", "true");
+                exercise.setAttribute("class", "form-control");
                 exercise.innerHTML = `${e.exercise}`;
                 exercise.addEventListener('keydown', edit)
                 // ui content end.
 
                 //generate ui button.
                 var deleteButton = document.createElement('button');
+                deleteButton.setAttribute("class", "btn btn-danger form-control");
                 deleteButton.innerHTML = "delete";
                 deleteButton.addEventListener("click", deleteRoutine);
                 
@@ -57,16 +63,20 @@ function updateUi(){
         }
         var addNew = document.createElement("li");
         addNew.setAttribute("id", "add");
+        addNew.setAttribute("class", "list-group-item");
 
         var newReps = document.createElement("input");
         newReps.setAttribute("placeholder", "Enter new reps");
+        newReps.setAttribute("class", "form-control");
         newReps.setAttribute("id", "new_reps");
 
         var newExercise = document.createElement("input");
         newExercise.setAttribute("placeholder", "Enter a new exercise");
+        newExercise.setAttribute("class", "form-control");
         newExercise.setAttribute("id", "new_exercise");
 
         var addNewButton = document.createElement("button");
+        addNewButton.setAttribute("class", "btn btn-success form-control");
         addNewButton.innerHTML = "add";
         addNewButton.addEventListener("click", addNewRecord);
 
