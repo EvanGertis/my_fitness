@@ -32,12 +32,12 @@ function updateUi(){
                 var reps = document.createElement("p");
                 reps.setAttribute("contentEditable", "true");
                 reps.innerHTML = `${e.reps}`;
-                reps.addEventListener("input", edit)
+                reps.addEventListener('keydown', edit)
                 
                 var exercise = document.createElement("p");
                 exercise.setAttribute("contentEditable", "true");
                 exercise.innerHTML = `${e.exercise}`;
-                exercise.addEventListener("input", edit)
+                exercise.addEventListener('keydown', edit)
                 // ui content end.
 
                 //generate ui button.
@@ -103,20 +103,33 @@ function edit(e){
     var exercise = exerciseEdit.innerHTML
 
     var rowId = e.target.parentNode.id;
-    if (esc) {
-      // restore state
-      document.execCommand('undo');
-      e.target.blur();
-    }
+    var esc = event.which == 27,
+        nl = event.which == 13,
+        el = event.target,
+        input = el.nodeName != 'INPUT' && el.nodeName != 'TEXTAREA',
+        data = {};
 
-    var xhttp = new XMLHttpRequest();
+    if (input) {
+        if (esc) {
+        // restore state
+            document.execCommand('undo');
+            el.blur();
+            } else if (nl) {
+                var xhttp = new XMLHttpRequest();
+                // regenerate ui.
+                xhttp.onreadystatechange = updateUi;
+                var params = `{"id":"${rowId}", "reps":"${reps}", "exercise":"${exercise}"}`;
+                xhttp.open("POST", "../monday/update.php")
+                xhttp.setRequestHeader('Content-type', 'application/raw');
+                xhttp.send(params);
+
+                el.blur();
+                event.preventDefault();
+            }
+        }
+
+
     
-    // // regenerate ui.
-    xhttp.onreadystatechange = updateUi;
-    var params = `{"id":"${rowId}", "reps":"${reps}", "exercise":"${exercise}"}`;
-    xhttp.open("POST", "../monday/update.php")
-    xhttp.setRequestHeader('Content-type', 'application/raw');
-    xhttp.send(params);
 
 }
 
