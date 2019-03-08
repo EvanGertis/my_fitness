@@ -6,85 +6,80 @@
         My workouts
     </div>
     <ul class="list-group list-group-flush">
-        <li id = "list" class="list-group-item">Monday</li>
+        <li id = "list" class="list-group-item"></li>
     </ul>
     </div>
 
 <?php include("./partials/footer.php")?>
 <script>
-
-(function create() {
-    var xhttp = new XMLHttpRequest();
-    var list = document.getElementById("list");
-
-    // cycle through data and add it to the list.
-    xhttp.onreadystatechange = function () {
-        if(this.readyState == 4 && this.status ==200){
-            var res = JSON.parse(this.response);
-            res.records.forEach(e => {
-
-                //generate main list.
-                var li = document.createElement("li")
-                li.setAttribute("id", e.id)
-                li.innerHTML = `${e.reps} ${e.exercise}`;
-
-                //generate ui buttons.
-                var editButton = document.createElement('button');
-                editButton.innerHTML = "edit";
-                editButton.addEventListener("click", editRoutine);
-                
-                var deleteButton = document.createElement('button');
-                deleteButton.innerHTML = "delete";
-                deleteButton.addEventListener("click", deleteRoutine);
-                
-                //append ui children.
-                li.appendChild(editButton);
-                li.appendChild(deleteButton);
-
-                list.appendChild(li);
-            })
-        }
-    };
-    xhttp.open("GET", "../monday/read.php" );
-    xhttp.send();
-})();
+updateUi();
 
 function updateUi(){
     var xhttp = new XMLHttpRequest();
     var list = document.getElementById("list");
-    
     // cycle through data and add it to the list.
     xhttp.onreadystatechange = function () {
+        list.innerHTML = "Monday";
         if(this.readyState == 4 && this.status ==200){
-            list.innerHTML = "Monday";
+    
             var res = JSON.parse(this.response);
             res.records.forEach(e => {
-                
                 //generate main list.
                 var li = document.createElement("li")
                 li.setAttribute("id", e.id)
-                li.innerHTML = `${e.reps} ${e.exercise}`;
 
-                //generate ui buttons.
-                var editButton = document.createElement('button');
-                editButton.innerHTML = "edit";
-                editButton.addEventListener("click", editRoutine);
+                // ui content begin.
+                var reps = document.createElement("p");
+                reps.setAttribute("contentEditable", "true");
+                reps.innerHTML = `${e.reps}`;
+                reps.addEventListener("input", edit)
                 
+                var exercise = document.createElement("p");
+                exercise.setAttribute("contentEditable", "true");
+                exercise.innerHTML = `${e.exercise}`;
+                exercise.addEventListener("input", edit)
+                // ui content end.
+
+                //generate ui button.
                 var deleteButton = document.createElement('button');
                 deleteButton.innerHTML = "delete";
                 deleteButton.addEventListener("click", deleteRoutine);
                 
+                //append ui content.
+                li.appendChild(reps);
+                li.appendChild(exercise);
+
                 //append ui children.
-                li.appendChild(editButton);
                 li.appendChild(deleteButton);
-                
+
                 list.appendChild(li);
             })
         }
+        var addNew = document.createElement("li");
+        addNew.setAttribute("id", "add");
+
+        var newReps = document.createElement("input");
+        newReps.setAttribute("placeholder", "Enter new reps");
+        newReps.setAttribute("id", "new_reps");
+
+        var newExercise = document.createElement("input");
+        newExercise.setAttribute("placeholder", "Enter a new exercise");
+        newExercise.setAttribute("id", "new_exercise");
+
+        var addNewButton = document.createElement("button");
+        addNewButton.innerHTML = "add";
+        addNewButton.addEventListener("click", addNewRecord);
+
+        addNew.appendChild(newReps);
+        addNew.appendChild(newExercise);
+        addNew.appendChild(addNewButton);
+        list.appendChild(addNew);
     };
     xhttp.open("GET", "../monday/read.php" );
     xhttp.send();
+
 }
+
 
 function deleteRoutine(e){
     var rowId = e.target.parentNode.id;
@@ -98,8 +93,44 @@ function deleteRoutine(e){
     xhttp.send(params);
 }
 
-function editRoutine(e){
+function edit(e){
+    var esc = event.which == 27;
+
+    var repsEdit = e.target.parentNode.children[0];
+    var exerciseEdit = e.target.parentNode.children[1];
+    
+    var reps = repsEdit.innerHTML
+    var exercise = exerciseEdit.innerHTML
+
     var rowId = e.target.parentNode.id;
+    if (esc) {
+      // restore state
+      document.execCommand('undo');
+      e.target.blur();
+    }
+
+    var xhttp = new XMLHttpRequest();
+    
+    // // regenerate ui.
+    xhttp.onreadystatechange = updateUi;
+    var params = `{"id":"${rowId}", "reps":"${reps}", "exercise":"${exercise}"}`;
+    xhttp.open("POST", "../monday/update.php")
+    xhttp.setRequestHeader('Content-type', 'application/raw');
+    xhttp.send(params);
+
+}
+
+//inserts a new record into the table.
+function addNewRecord(e){
+    var reps = e.target.parentNode.children[0].value;
+    var exercise = e.target.parentNode.children[1].value;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = updateUi;
+    var params = `{"reps":"${reps}", "exercise":"${exercise}"}`;
+    xhttp.open("POST", "../monday/create.php");
+    xhttp.setRequestHeader('Content-type', 'application/raw');
+    xhttp.send(params);
 }
 
 </script>
