@@ -108,6 +108,7 @@ function edit(e){
         el = event.target,
         input = el.nodeName != 'INPUT' && el.nodeName != 'TEXTAREA',
         data = {};
+    
 
     if (input) {
         if (esc) {
@@ -116,6 +117,7 @@ function edit(e){
             el.blur();
             } else if (nl) {
                 var xhttp = new XMLHttpRequest();
+                
                 // regenerate ui.
                 xhttp.onreadystatechange = updateUi;
                 var params = `{"id":"${rowId}", "reps":"${reps}", "exercise":"${exercise}"}`;
